@@ -243,6 +243,7 @@ public class ConfigBuilder {
             .put("systems.myInMemorySystem.samza.key.serde", "string")
             .put("systems.myInMemorySystem.stream.samza.key.serde", "string")
             .put("inmemory.scope", "myInMemoryScope")
+            .put("serializers.registry.string.class", StringSerdeFactory.class.getName())
 
             .put("stores.beamStore.key.serde", "byteArraySerde")
             .put("stores.beamStore.msg.serde", "byteSerde")
