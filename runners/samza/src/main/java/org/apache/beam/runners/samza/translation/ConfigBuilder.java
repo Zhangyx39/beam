@@ -246,6 +246,9 @@ public class ConfigBuilder {
             .put("inmemory.scope", "myInMemoryScope")
             .put("serializers.registry.string.class", StringSerdeFactory.class.getName())
 
+            .put("stores.beamStore.write.batch.size", "0")
+            .put("stores.beamStore.object.cache.size", "0")
+
             .put("stores.beamStore.key.serde", "byteArraySerde")
             .put("stores.beamStore.msg.serde", "byteSerde")
             .put("serializers.registry.byteSerde.class", ByteSerdeFactory.class.getName())
