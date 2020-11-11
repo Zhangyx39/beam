@@ -234,6 +234,16 @@ public class ConfigBuilder {
             .put(
                 "stores.beamStore.factory",
                 "org.apache.samza.storage.kv.RocksDbKeyValueStorageEngineFactory")
+
+            .put("job.default.system", "myInMemorySystem")
+            .put("systems.myInMemorySystem.default.stream.samza.offset.default", "oldest")
+            .put(
+                "systems.myInMemorySystem.samza.factory",
+                "org.apache.samza.system.inmemory.InMemorySystemFactory")
+            .put("systems.myInMemorySystem.samza.key.serde", "string")
+            .put("systems.myInMemorySystem.stream.samza.key.serde", "string")
+            .put("inmemory.scope", "myInMemoryScope")
+
             .put("stores.beamStore.key.serde", "byteArraySerde")
             .put("stores.beamStore.msg.serde", "byteSerde")
             .put("serializers.registry.byteSerde.class", ByteSerdeFactory.class.getName())
