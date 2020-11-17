@@ -249,10 +249,12 @@ public class ConfigBuilder {
 //            .put("stores.beamStore.write.batch.size", "0")
 //            .put("stores.beamStore.object.cache.size", "0")
 
-            .put("metrics.reporters", "snapshot")
-            .put("metrics.reporter.snapshot.class", "org.apache.samza.metrics.reporter.MetricsSnapshotReporterFactory")
-            .put("metrics.reporter.snapshot.stream", "myInMemorySystem.metrics")
-            .put("systems.myInMemorySystem.streams.metrics.samza.msg.serde", "")
+//            .put("metrics.reporters", "snapshot")
+//            .put("metrics.reporter.snapshot.class", "org.apache.samza.metrics.reporter.MetricsSnapshotReporterFactory")
+//            .put("metrics.reporter.snapshot.stream", "myInMemorySystem.metrics")
+//            .put("systems.myInMemorySystem.streams.metrics.samza.msg.serde", "")
+
+            .put("stores.beamStore.container.write.buffer.size.bytes", "1024")
 
             .put("stores.beamStore.key.serde", "byteArraySerde")
             .put("stores.beamStore.msg.serde", "byteSerde")
