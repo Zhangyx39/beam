@@ -254,7 +254,7 @@ public class ConfigBuilder {
 //            .put("metrics.reporter.snapshot.stream", "myInMemorySystem.metrics")
 //            .put("systems.myInMemorySystem.streams.metrics.samza.msg.serde", "")
 
-            .put("stores.beamStore.container.write.buffer.size.bytes", "1024")
+//            .put("stores.beamStore.container.write.buffer.size.bytes", "1024")
 
             .put("stores.beamStore.key.serde", "byteArraySerde")
             .put("stores.beamStore.msg.serde", "byteSerde")
