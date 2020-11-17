@@ -140,10 +140,10 @@ public class NexmarkConfiguration implements Serializable {
   @JsonProperty public int hotBiddersRatio = 4;
 
   /** Window size, in seconds, for queries 3, 5, 7 and 8. */
-  @JsonProperty public long windowSizeSec = 60;
+  @JsonProperty public long windowSizeSec = 10;
 
   /** Sliding window period, in seconds, for query 5. */
-  @JsonProperty public long windowPeriodSec = 1;
+  @JsonProperty public long windowPeriodSec = 5;
 
   /** Number of seconds to hold back events according to their reported timestamp. */
   @JsonProperty public long watermarkHoldbackSec = 0;
