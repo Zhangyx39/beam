@@ -19,7 +19,10 @@ package org.apache.beam.runners.samza.metrics;
 
 import static org.apache.beam.runners.core.metrics.MetricsContainerStepMap.asAttemptedOnlyMetricResults;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import org.apache.beam.runners.core.metrics.MetricsContainerStepMap;
 import org.apache.beam.sdk.metrics.GaugeResult;
@@ -32,6 +35,9 @@ import org.apache.samza.metrics.Counter;
 import org.apache.samza.metrics.Gauge;
 import org.apache.samza.metrics.Metric;
 import org.apache.samza.metrics.MetricsRegistryMap;
+import org.apache.samza.metrics.MetricsVisitor;
+import org.apache.samza.metrics.Timer;
+
 
 /**
  * This class holds the {@link MetricsContainer}s for BEAM metrics, and update the results to Samza
@@ -40,6 +46,7 @@ import org.apache.samza.metrics.MetricsRegistryMap;
 public class SamzaMetricsContainer {
   private static final String BEAM_METRICS_GROUP = "BeamMetrics";
   private static final String DELIMITER = "-";
+  private static final AtomicInteger counter = new AtomicInteger(0);
 
   private final MetricsContainerStepMap metricsContainers = new MetricsContainerStepMap();
   private final MetricsRegistryMap metricsRegistry;
@@ -57,7 +64,41 @@ public class SamzaMetricsContainer {
     return this.metricsContainers;
   }
 
+  private void printMetrics() {
+    HashMap<String, HashMap<String, String>> maps = new HashMap<>();
+    ConcurrentHashMap<String, ConcurrentHashMap<String, Metric>> metrics = metricsRegistry.metrics();
+    for (Map.Entry<String, ConcurrentHashMap<String, Metric>> stringConcurrentHashMapEntry : metrics.entrySet()) {
+      HashMap<String, String> map = new HashMap<>();
+      maps.put(stringConcurrentHashMapEntry.getKey(), map);
+      ConcurrentHashMap<String, Metric> value = stringConcurrentHashMapEntry.getValue();
+      for (Map.Entry<String, Metric> stringMetricEntry : value.entrySet()) {
+        Metric metric = stringMetricEntry.getValue();
+        metric.visit(new MetricsVisitor() {
+          @Override
+          public void counter(Counter counter) {
+            map.put(stringMetricEntry.getKey(), counter.toString());
+          }
+
+          @Override
+          public <T> void gauge(Gauge<T> gauge) {
+            map.put(stringMetricEntry.getKey(), gauge.toString());
+          }
+
+          @Override
+          public void timer(Timer timer) {
+            map.put(stringMetricEntry.getKey(), String.valueOf(timer.getSnapshot().getAverage()));
+          }
+        });
+      }
+    }
+    System.out.println(maps);
+  }
+
   public void updateMetrics(String stepName) {
+//    System.out.println("updating metrics :" + counter.incrementAndGet());
+    if (counter.incrementAndGet() % 500000 == 0) {
+      printMetrics();
+    }
     assert metricsRegistry != null;
 
     final MetricResults metricResults = asAttemptedOnlyMetricResults(metricsContainers);
